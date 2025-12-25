@@ -1,0 +1,14 @@
+/home/sanzeda/Videos/vsCODE/p6/obj/Debug/net10.0/p6.GeneratedMSBuildEditorConfig.editorconfig
+/home/sanzeda/Videos/vsCODE/p6/obj/Debug/net10.0/p6.AssemblyInfoInputs.cache
+/home/sanzeda/Videos/vsCODE/p6/obj/Debug/net10.0/p6.AssemblyInfo.cs
+/home/sanzeda/Videos/vsCODE/p6/obj/Debug/net10.0/p6.csproj.CoreCompileInputs.cache
+/home/sanzeda/Videos/vsCODE/p6/bin/Debug/net10.0/p6
+/home/sanzeda/Videos/vsCODE/p6/bin/Debug/net10.0/p6.deps.json
+/home/sanzeda/Videos/vsCODE/p6/bin/Debug/net10.0/p6.runtimeconfig.json
+/home/sanzeda/Videos/vsCODE/p6/bin/Debug/net10.0/p6.dll
+/home/sanzeda/Videos/vsCODE/p6/bin/Debug/net10.0/p6.pdb
+/home/sanzeda/Videos/vsCODE/p6/obj/Debug/net10.0/p6.dll
+/home/sanzeda/Videos/vsCODE/p6/obj/Debug/net10.0/refint/p6.dll
+/home/sanzeda/Videos/vsCODE/p6/obj/Debug/net10.0/p6.pdb
+/home/sanzeda/Videos/vsCODE/p6/obj/Debug/net10.0/p6.genruntimeconfig.cache
+/home/sanzeda/Videos/vsCODE/p6/obj/Debug/net10.0/ref/p6.dll
