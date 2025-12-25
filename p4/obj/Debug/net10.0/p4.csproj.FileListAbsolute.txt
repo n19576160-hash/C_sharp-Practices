@@ -1,0 +1,14 @@
+/home/sanzeda/Videos/vsCODE/p4/bin/Debug/net10.0/p4
+/home/sanzeda/Videos/vsCODE/p4/bin/Debug/net10.0/p4.deps.json
+/home/sanzeda/Videos/vsCODE/p4/bin/Debug/net10.0/p4.runtimeconfig.json
+/home/sanzeda/Videos/vsCODE/p4/bin/Debug/net10.0/p4.dll
+/home/sanzeda/Videos/vsCODE/p4/bin/Debug/net10.0/p4.pdb
+/home/sanzeda/Videos/vsCODE/p4/obj/Debug/net10.0/p4.GeneratedMSBuildEditorConfig.editorconfig
+/home/sanzeda/Videos/vsCODE/p4/obj/Debug/net10.0/p4.AssemblyInfoInputs.cache
+/home/sanzeda/Videos/vsCODE/p4/obj/Debug/net10.0/p4.AssemblyInfo.cs
+/home/sanzeda/Videos/vsCODE/p4/obj/Debug/net10.0/p4.csproj.CoreCompileInputs.cache
+/home/sanzeda/Videos/vsCODE/p4/obj/Debug/net10.0/p4.dll
+/home/sanzeda/Videos/vsCODE/p4/obj/Debug/net10.0/refint/p4.dll
+/home/sanzeda/Videos/vsCODE/p4/obj/Debug/net10.0/p4.pdb
+/home/sanzeda/Videos/vsCODE/p4/obj/Debug/net10.0/p4.genruntimeconfig.cache
+/home/sanzeda/Videos/vsCODE/p4/obj/Debug/net10.0/ref/p4.dll
