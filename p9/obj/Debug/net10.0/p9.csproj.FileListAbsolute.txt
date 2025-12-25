@@ -1,0 +1,14 @@
+/home/sanzeda/Videos/vsCODE/p9/bin/Debug/net10.0/p9
+/home/sanzeda/Videos/vsCODE/p9/bin/Debug/net10.0/p9.deps.json
+/home/sanzeda/Videos/vsCODE/p9/bin/Debug/net10.0/p9.runtimeconfig.json
+/home/sanzeda/Videos/vsCODE/p9/bin/Debug/net10.0/p9.dll
+/home/sanzeda/Videos/vsCODE/p9/bin/Debug/net10.0/p9.pdb
+/home/sanzeda/Videos/vsCODE/p9/obj/Debug/net10.0/p9.GeneratedMSBuildEditorConfig.editorconfig
+/home/sanzeda/Videos/vsCODE/p9/obj/Debug/net10.0/p9.AssemblyInfoInputs.cache
+/home/sanzeda/Videos/vsCODE/p9/obj/Debug/net10.0/p9.AssemblyInfo.cs
+/home/sanzeda/Videos/vsCODE/p9/obj/Debug/net10.0/p9.csproj.CoreCompileInputs.cache
+/home/sanzeda/Videos/vsCODE/p9/obj/Debug/net10.0/p9.dll
+/home/sanzeda/Videos/vsCODE/p9/obj/Debug/net10.0/refint/p9.dll
+/home/sanzeda/Videos/vsCODE/p9/obj/Debug/net10.0/p9.pdb
+/home/sanzeda/Videos/vsCODE/p9/obj/Debug/net10.0/p9.genruntimeconfig.cache
+/home/sanzeda/Videos/vsCODE/p9/obj/Debug/net10.0/ref/p9.dll
