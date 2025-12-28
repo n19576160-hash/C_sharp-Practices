@@ -30,7 +30,13 @@ namespace BankingSystem
 
             // Step 6: Trying to withdraw money
             Console.WriteLine("\n--- Imtiaz tried to withdraw100000 taka ---");
-            imtiaz.Withdraw(100000);
+            try{
+                imtiaz.Withdraw(100000);
+            }
+            catch (InvalidOperationException ex){
+                    Console.WriteLine($"Error: {ex.Message}");
+            }
+            
 
             // Step 7: Current state
             Console.WriteLine("\n===== Accounts Current State =====");
@@ -41,5 +47,15 @@ namespace BankingSystem
             Console.WriteLine("\nPress any key to exit...");
             Console.ReadKey();
         }
+        // Method 1: Display Account Info 
+        static void DisplayAccountInfo(BankAccount acc)
+        {
+            Console.WriteLine("\n===== Account Information =====");
+            Console.WriteLine($"Account No.: {acc.AccountNumber}");
+            Console.WriteLine($"Account Holder : {acc.AccountName}");
+            Console.WriteLine($"Current Balance: {acc.Balance} taka");
+            Console.WriteLine("========================\n");
+        }
+        
     }
 }
