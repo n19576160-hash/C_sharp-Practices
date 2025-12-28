@@ -17,19 +17,16 @@ namespace BankingSystem
             this.Balance = initialBalance;
         }
 
+        
         // Method 1: Deposit
         public void Deposit(double amount)
         {
-            if (amount > 0)
+            if (amount <= 0)
             {
-                Balance += amount;
-                Console.WriteLine($"Deposit successful! {amount} taka has been added।");
-                Console.WriteLine($"Current Balance: {Balance} taka");
+                throw new ArgumentException("Deposit amount must be positive");
             }
-            else
-            {
-                Console.WriteLine("Error! Please deposit a valid amount");
-            }
+
+            Balance += amount;
         }
 
         // Method 2: Withdraw 
@@ -37,21 +34,15 @@ namespace BankingSystem
         {
             if (amount <= 0)
             {
-                Console.WriteLine("Error! Please write a valid amount");
-                return;
+                throw new ArgumentException("Withdrawal amount must be positive");
             }
 
-            if (Balance >= amount)
+            if (Balance < amount)
             {
-                Balance -= amount;
-                Console.WriteLine($"Successfully credited ! {amount} taka has been withdrawn।");
-                Console.WriteLine($"Current Balance: {Balance} taka");
+                throw new InvalidOperationException($"Insufficient balance. Current balance: {Balance:N2} BDT");
             }
-            else
-            {
-                Console.WriteLine("Failed to Withdraw! insufficient Balance");
-                Console.WriteLine($"Current Balance: {Balance} taka");
-            }
+
+            Balance -= amount;
         }
 
         // Method 3: Transfer to another account
@@ -59,41 +50,17 @@ namespace BankingSystem
         {
             if (amount <= 0)
             {
-                Console.WriteLine("Error! Please write a valid amount");
-                return;
+                throw new ArgumentException("Transfer amount must be positive");
             }
 
-            if (Balance >= amount)
+            if (targetAccount == null)
             {
-                
-                //this line will withdraw amount from sender account 
-                this.Withdraw(amount);
-                //this line will deposit amount to receiver account 
-                targetAccount.Deposit(amount);
-                //success message will be shown to the sender
-                Console.WriteLine($"Successfully transferred! {amount} taka has been sent to target account: {targetAccount.AccountName}");
-                Console.WriteLine($"Your current Balance: {Balance} taka");
-
+                throw new ArgumentNullException(nameof(targetAccount), "Target account cannot be null");
             }
-            else
-            {
-                Console.WriteLine("Failed to withdraw! Insufficient Balance।");
-                Console.WriteLine($"Current Balance: {Balance} taka");
-            }
-        }
 
-        
-        
-        // Method 4: Display Account Info 
-        public void DisplayAccountInfo()
-        {
-            Console.WriteLine("\n===== Account Information =====");
-            Console.WriteLine($"Account No.: {AccountNumber}");
-            Console.WriteLine($"Account Holder : {AccountName}");
-            Console.WriteLine($"Current Balance: {Balance} taka");
-            Console.WriteLine("========================\n");
+            this.Withdraw(amount);
+            targetAccount.Balance += amount;
         }
-        
         
     }
 }
