@@ -28,66 +28,43 @@ namespace CarRentalSystem
         }
 
         // Method 1: Renting Portion
-        public bool RentCar(int days, string customerName)
+        public void RentCar(int days, string customerName)
         {
-            if (!IsAvailable)
+            if (days <= 0)
             {
-                Console.WriteLine($"Sorry! {Brand} {Model} already rented out.");
-                return false;
+                throw new ArgumentException("Rental days must be positive");
+            }
+             if (!IsAvailable)
+            {
+                throw new InvalidOperationException($"{Brand} {Model} is currently rented out");
             }
 
             if (MaintenanceDue)
             {
-                Console.WriteLine($"Sorry! {Brand} {Model} in maintenance ");
-                return false;
+                throw new InvalidOperationException($"{Brand} {Model} requires maintenance before rental");
             }
 
-            if (days <= 0)
-            {
-                Console.WriteLine(" duration to rent a car must be at least 1 day or more.");
-                return false;
-            }
-
-            // Renting the car
+            // Perform rental
             IsAvailable = false;
             TotalRentalDays += days;
-            double rentalCost = days * DailyRate;
-            TotalRevenue += rentalCost;
+            TotalRevenue += days * DailyRate;
 
-            Console.WriteLine($"Successful! {Brand} {Model} is rented out.");
-            Console.WriteLine($"  Customer Name: {customerName}");
-            Console.WriteLine($"  Total Rental Days : {days} day/s");
-            Console.WriteLine($"  Daily Rate: {DailyRate:N2} taka");
-            Console.WriteLine($"  Total Cost: {rentalCost:N2} taka");
-
-            // maintenance needed after half a month of rental for each car
+            // Check if maintenance needed
             if (TotalRentalDays >= 15)
             {
                 MaintenanceDue = true;
-                Console.WriteLine("  Caution: maintenance needed !");
             }
-
-            return true;
         }
 
         // Method 2: Returning Back
-        public bool ReturnCar()
+        public void ReturnCar()
         {
             if (IsAvailable)
             {
-                Console.WriteLine($"({Brand} {Model} ):This car is available now!");
-                return false;
+                throw new InvalidOperationException($"{Brand} {Model} is not currently rented");
             }
 
             IsAvailable = true;
-            Console.WriteLine($"{Brand} {Model} is returned sucessfully.");
-
-            if (MaintenanceDue)
-            {
-                Console.WriteLine("Please ,complete the maintenance");
-            }
-
-            return true;
         }
 
         // Method 3: Maintenance 
@@ -95,39 +72,42 @@ namespace CarRentalSystem
         {
             if (!IsAvailable)
             {
-                Console.WriteLine($"If car is with the customer, maintenance paused until returned");
-                return;
+                throw new InvalidOperationException("Cannot perform maintenance while car is rented");
             }
 
-            Console.WriteLine($"{Brand} {Model} is in maintainence...");
             MaintenanceDue = false;
-            TotalRentalDays = 0;  // rental counter reset
-            Console.WriteLine($"Maintenance completed! car is ready for rent again।");
+            TotalRentalDays = 0;
         }
 
-        // Method 4: Displaying Car information
-        public void DisplayCarInfo()
+        // Method 4: Get rental cost
+         public double CalculateRentalCost(int days)
+        {
+            if (days <= 0)
+                throw new ArgumentException("Days must be positive");
+
+            return days * DailyRate;
+        }
+
+
+        // Method 5:Get Car info
+        public string GetCarInfo()
         {
             string status = IsAvailable ? "Available" : "Rented";
-            if (MaintenanceDue)
-            {
-                status = "Maintenance Due";
-            }
+            if (MaintenanceDue) status = "Maintenance Due";
 
-            Console.WriteLine($"  [{CarId}] {Brand} {Model} ");
-            Console.WriteLine($"       Daily Rate: {DailyRate:N2} taka");
-            Console.WriteLine($"       Status: {status}");
-            Console.WriteLine($"       Total rental Days: {TotalRentalDays} day");
-            Console.WriteLine($"       total Revenue: {TotalRevenue:N2} taka");
+            return $"[{CarId}] {Brand} {Model}\n" +
+                   $"Daily Rate: {DailyRate:N2} BDT\n" +
+                   $"Status: {status}\n" +
+                   $"Total Days Rented: {TotalRentalDays}\n" +
+                   $"Total Revenue: {TotalRevenue:N2} BDT";
         }
 
-        // Method 5:Short Description( for List)
-        public void DisplayShortInfo()
+        public string GetShortInfo()
         {
-            string status = IsAvailable ? "Yes" : "No";
-            if (MaintenanceDue) status = "MT";
-            
-            Console.WriteLine($"  {status} [{CarId}] {Brand} {Model} - {DailyRate:N2} Taka per day");
+            string status = IsAvailable ? "Available" : "Not Available";
+            if (MaintenanceDue) status = "In Maintainance";
+            return $"|{status}| [{CarId}] {Brand} {Model} - {DailyRate:N2} BDT/day";
         }
+
     }
 }
