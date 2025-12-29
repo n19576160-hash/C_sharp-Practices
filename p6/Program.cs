@@ -38,19 +38,32 @@ namespace CarRentalSystem
             carFleet[0].RentCar(5, "Imtiaz Rahman");
             Console.WriteLine();
 
-            // Step 5: Renting - Transaction 2
-            Console.WriteLine("--- Transaction 2: Faria rentedBMW X5  ---");
-            carFleet[3].RentCar(3, "Faria Islam");
+        
+            // Step 5: trying to rent a car that is already rented (Unsuccessful attempt)
+            Console.WriteLine("--- Transaction 2: Faria wanted to rent Toyota Corolla ---");
+
+            try
+            {
+                carFleet[0].RentCar(3, "Faria Islam");
+                Console.WriteLine(" Rental successful!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Rental failed: {ex.Message}");
+            }
             Console.WriteLine();
 
-            // Step 6: Renting - Transaction 3
-            Console.WriteLine("--- Transaction 3: Sakib rented Honda Civic---");
-            carFleet[1].RentCar(7, "Sakib Ahmed");
-            Console.WriteLine();
-
-            // Step 7: trying to rent a car that is already rented (Unsuccessful attempt)
-            Console.WriteLine("--- Transaction 4: Nusrat wanted to rent Toyota Corolla  ---");
-            carFleet[0].RentCar(4, "Nusrat Jahan");
+            // Step 6: Invalid rental days
+            Console.WriteLine("--- Transaction 3: Mistake in rental days entering---");
+            try
+            {
+                carFleet[1].RentCar(-5, "Sakib Ahmed");
+                Console.WriteLine(" Rental successful!");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"Rental failed: {ex.Message}");
+            }
             Console.WriteLine();
 
             // Step 8: showing currently Available cars (Updated)
@@ -60,13 +73,10 @@ namespace CarRentalSystem
             
 
             // Step 9: Returning
-            Console.WriteLine("--- Imtiaz has returnedToyota Corolla---");
+            Console.WriteLine("--- Imtiaz has returned Toyota Corolla---");
             carFleet[0].ReturnCar();
             Console.WriteLine();
 
-            Console.WriteLine("--- Faria has returned BMW X5 ---");
-            carFleet[3].ReturnCar();
-            Console.WriteLine();
 
             // Step 10: re-renting
             Console.WriteLine("\n--- Transaction 5: Nusrat rented Toyota Corolla now--");
@@ -75,11 +85,21 @@ namespace CarRentalSystem
 
             // Step 11: Long term rent (Maintenance trigger)
             Console.WriteLine("--- Transaction 6: Rakib rented Mercedes (Long-term) ---");
-            carFleet[4].RentCar(16, "Rakib Hasan");
+            try{
+                carFleet[4].RentCar(16, "Rakib Hasan");
+                carFleet[4].PerformMaintenance();
+                Console.WriteLine("Maintenance completed!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Maintenance failed: {ex.Message}");
+            }
             Console.WriteLine();
+            
+         
 
             // Step 12 Mercedes returned AND its Maintenance
-            Console.WriteLine("--- Rakib returnedMercedes ---");
+            Console.WriteLine("--- Rakib returned Mercedes ---");
             carFleet[4].ReturnCar();
             Console.WriteLine();
 
@@ -96,6 +116,7 @@ namespace CarRentalSystem
             CalculateTotalRevenue(carFleet);
             FindMostProfitableCar(carFleet);
             FindMostRentedCar(carFleet);
+            Console.WriteLine();
 
             // Step 15: Search by ID
             
@@ -103,8 +124,8 @@ namespace CarRentalSystem
             Car foundCar = FindCarById(carFleet, "CAR-003");
             if (foundCar != null)
             {
-                Console.WriteLine("Car found:\n");
-                foundCar.DisplayCarInfo();
+                Console.WriteLine("Car found -->");
+                Console.WriteLine(foundCar.GetCarInfo());
             }
 
             
@@ -118,7 +139,7 @@ namespace CarRentalSystem
             for (int i = 0; i < cars.Count; i++)
             {
                 Console.WriteLine($"{i + 1}.");
-                cars[i].DisplayCarInfo();
+                Console.WriteLine(cars[i].GetCarInfo());
                 Console.WriteLine();
             }
         }
@@ -134,7 +155,7 @@ namespace CarRentalSystem
                 if (car.IsAvailable && !car.MaintenanceDue)
                 {
                     count++;
-                    car.DisplayShortInfo();
+                    Console.WriteLine(car.GetShortInfo());
                 }
             }
 
@@ -144,7 +165,7 @@ namespace CarRentalSystem
             }
             else
             {
-                Console.WriteLine($"\n  Total cars Available: {count}ট");
+                Console.WriteLine($"\n  Total cars Available: {count}");
             }
             Console.WriteLine();
         }
@@ -176,7 +197,7 @@ namespace CarRentalSystem
             }
 
             Console.WriteLine("\nMost Profitable car:");
-            mostProfitable.DisplayShortInfo();
+            Console.WriteLine(mostProfitable.GetShortInfo());
             Console.WriteLine($"Total revenue: {mostProfitable.TotalRevenue:N2} taka");
         }
 
@@ -197,7 +218,7 @@ namespace CarRentalSystem
             }
 
             Console.WriteLine("\nMost Popular Car:");
-            mostRented.DisplayShortInfo();
+            Console.WriteLine(mostRented.GetShortInfo());
         }
 
         // Helper Method 6:Finding car with its ID 
