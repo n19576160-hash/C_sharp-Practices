@@ -8,28 +8,36 @@ namespace BankingSystem
         public string AccountNumber{get;private set;}
         public string AccountName{get;private set;}
         public double Balance{get;private set;}
+        public DateTime OpenDate{get;private set;}
+        public string AccountType{get;private set;}
 
         // Constructor - creating new account
-        public BankAccount(string accountNumber, string accountName, double initialBalance)
+        public BankAccount(string accountNumber, string accountName, double initialBalance,string accountType="Savings")
         {
+
+            if (initialBalance < 0)  throw new ArgumentException("Initial balance cannot be negative");
+
+            if (string.IsNullOrEmpty(accountNumber)) throw new ArgumentException("Account number cannot be empty");
+
+            if (string.IsNullOrEmpty(accountName))  throw new ArgumentException("Account name cannot be empty");
+
+
             this.AccountNumber = accountNumber;
             this.AccountName = accountName;
             this.Balance = initialBalance;
+            this.OpenDate = DateTime.Now;
+            this.AccountType = accountType;
         }
 
         // Method 1: Deposit
         public void Deposit(double amount)
         {
-            if (amount > 0)
+            if (amount <= 0)
             {
-                Balance += amount;
-                Console.WriteLine($"Deposit successful! {amount} taka has been added।");
-                Console.WriteLine($"Current Balance: {Balance} taka");
+                throw new ArgumentException("Deposit amount must be positive");
             }
-            else
-            {
-                Console.WriteLine("Error! Please deposit a valid amount");
-            }
+
+            Balance += amount;
         }
 
         // Method 2: Withdraw 
@@ -37,21 +45,17 @@ namespace BankingSystem
         {
             if (amount <= 0)
             {
-                Console.WriteLine("Error! Please write a valid amount");
-                return;
+                throw new ArgumentException("Withdrawal amount must be positive");
             }
 
-            if (Balance >= amount)
+            if (Balance < amount)
             {
-                Balance -= amount;
-                Console.WriteLine($"Successfully credited ! {amount} taka has been withdrawn।");
-                Console.WriteLine($"Current Balance: {Balance} taka");
+                throw new InvalidOperationException(
+                    $"Insufficient balance. Available: {Balance:N2} BDT, Required: {amount:N2} BDT"
+                );
             }
-            else
-            {
-                Console.WriteLine("Failed to Withdraw! insufficient Balance");
-                Console.WriteLine($"Current Balance: {Balance} taka");
-            }
+
+            Balance -= amount;
         }
 
         // Method 3: Transfer to another account
@@ -59,38 +63,57 @@ namespace BankingSystem
         {
             if (amount <= 0)
             {
-                Console.WriteLine("Error! Please write a valid amount");
-                return;
+                throw new ArgumentException("Transfer amount must be positive");
+            }
+            if (targetAccount == null)
+            {
+                throw new ArgumentNullException(nameof(targetAccount), "Target account cannot be null");
+            }
+            if (this.AccountNumber == targetAccount.AccountNumber)
+            {
+                throw new InvalidOperationException("Cannot transfer to the same account");
+            }
+             if (Balance < amount)
+            {
+                throw new InvalidOperationException(
+                    $"Insufficient balance for transfer. Available: {Balance:N2} BDT"
+                );
             }
 
-            if (Balance >= amount)
-            {
-                
-                //this line will withdraw amount from sender account 
-                this.Withdraw(amount);
-                //this line will deposit amount to receiver account 
-                targetAccount.Deposit(amount);
-                //success message will be shown to the sender
-                Console.WriteLine($"Successfully transferred! {amount} taka has been sent to target account: {targetAccount.AccountName}");
-                Console.WriteLine($"Your current Balance: {Balance} taka");
-
-            }
-            else
-            {
-                Console.WriteLine("Failed to withdraw! Insufficient Balance।");
-                Console.WriteLine($"Current Balance: {Balance} taka");
-            }
+            
+            this.Withdraw(amount);
+            targetAccount.Deposit(amount);
+        
+            
         }
-
-        
-        
-        // Method 4: Display Account Info 
-        public void DisplayAccountInfo()
+        //Method 4: Check if given Account has sufficient balance
+        public bool HasSufficientBalance(double amount)
         {
-            Console.WriteLine($"  [{AccountNumber}] {AccountName} - Balance: {Balance:N2} taka");
+            return Balance >= amount;
         }
+
+        // Method 5: Get account info as string
+        public string GetAccountInfo()
+        {
+            return $"Account Number: {AccountNumber}\n" +
+                   $"Account Name: {AccountName}\n" +
+                   $"Account Type: {AccountType}\n" +
+                   $"Balance: {Balance:N2} BDT\n" +
+                   $"Opened: {OpenDate:dd MMM yyyy}";
+        }
+
         
         
+        //Method 6: Get short summary
+        public string GetSummary()
+        {
+            return $"[{AccountNumber}] {AccountName} - {Balance:N2} BDT ({AccountType})";
+        }
+
+        //Method 7: Get account holder name
+        public string GetAccountHolder()
+        {
+            return AccountName;
+        }
     }
 }
-
