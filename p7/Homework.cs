@@ -23,20 +23,22 @@ namespace HomeworkTrackingSystem
             Comments = "";
         }
 
-        public void DisplaySubmission()
-        {
-            string gradeStatus = IsGraded ? $"{Grade}/100" : "Not Graded";
-            string lateStatus = "";
-            
-            Console.WriteLine($"       {StudentName} ({StudentId})");
-            Console.WriteLine($"       Submit: {SubmitDate:dd MMM yyyy}");
-            Console.WriteLine($"       Grade: {gradeStatus}");
-            
-            if (!string.IsNullOrEmpty(Comments))
-            {
-                Console.WriteLine($"       Comments: {Comments}");
-            }
-        }
+    }
+
+    // Enum for submission results
+    public enum SubmissionResult
+    {
+        Success,
+        AlreadySubmitted,
+        InvalidStudent
+    }
+
+    // Enum for grading results
+    public enum GradingResult
+    {
+        Success,
+        InvalidGrade,
+        SubmissionNotFound
     }
 
     // Homework class - homework management
@@ -89,27 +91,16 @@ namespace HomeworkTrackingSystem
             }
         }
 
-        // Method 1: assigning homework to Students
-        public void AssignToStudents(int studentCount)
-        {
-            Console.WriteLine($"\nHomework '{Title}' assigned");
-            Console.WriteLine($"  Subject: {Subject}");
-            Console.WriteLine($"  Assign Date: {AssignDate:dd MMM yyyy}");
-            Console.WriteLine($"  Due Date: {DueDate:dd MMM yyyy}");
-            Console.WriteLine($"  Total Students: {studentCount}");
-            Console.WriteLine($"  Total Marks: {TotalMarks}");
-        }
-
-        // Method 2: Student submitted homework 
-        public bool SubmitHomework(string studentId, string studentName)
+        // Method 1: Student submitted homework 
+        public SubmissionResult SubmitHomework(string studentId, string studentName)
         {
             // Check whether this student has already submitted 
             foreach (var sub in submissions)
             {
                 if (sub.StudentId == studentId)
                 {
-                    Console.WriteLine($"{studentName} has submitted already !");
-                    return false;
+                    
+                    return SubmissionResult.AlreadySubmitted;
                 }
             }
 
@@ -117,26 +108,28 @@ namespace HomeworkTrackingSystem
             Submission newSubmission = new Submission(studentId, studentName, submitDate);
             submissions.Add(newSubmission);
 
-            // Check whether it is a late submission 
-            if (submitDate > DueDate)
-            {
-                Console.WriteLine($"{studentName}'s submission LATE! (Due: {DueDate:dd MMM yyyy})");
-            }
-            else
-            {
-                Console.WriteLine($"{studentName} has successfully submitted the  homework !");
-            }
-
-            return true;
+            return SubmissionResult.Success;
         }
 
+        // Method 2: Check if submission is late
+        public bool IsSubmissionLate(string studentId)
+        {
+            foreach (var sub in submissions)
+            {
+                if (sub.StudentId == studentId)
+                {
+                    return sub.SubmitDate > DueDate;
+                }
+            }
+            return false;
+        }
+        
         // Method 3: Grading
-        public bool GradeSubmission(string studentId, double grade, string comments = "")
+        public GradingResult GradeSubmission(string studentId, double grade, string comments = "")
         {
             if (grade < 0 || grade > TotalMarks)
             {
-                Console.WriteLine($"Invalid grade! Grade must be between 0 and {TotalMarks}");
-                return false;
+                return GradingResult.InvalidGrade;;
             }
 
             // Student submission finding
@@ -148,50 +141,33 @@ namespace HomeworkTrackingSystem
                     sub.IsGraded = true;
                     sub.Comments = comments;
                     
-                    Console.WriteLine($" {sub.StudentName}'s homework graded: {grade}/{TotalMarks}");
-                    return true;
+                    return GradingResult.Success;
                 }
             }
 
-            Console.WriteLine($" Student ID {studentId} has no submission found!");
-            return false;
+            return GradingResult.SubmissionNotFound;
         }
 
         // Method 4: show all submissions
-        public void ShowAllSubmissions()
+        public List<Submission> GetAllSubmissions()
         {
-            Console.WriteLine($"Homework: {Title}");
-
-            if (submissions.Count == 0)
-            {
-                Console.WriteLine(" no submissions found .\n");
-                return;
-            }
-
-            Console.WriteLine($"  Total Submissions: {submissions.Count}");
-            Console.WriteLine($"  Graded: {GradedCount}/{submissions.Count}\n");
-
-            foreach (var sub in submissions)
-            {
-                sub.DisplaySubmission();
-                Console.WriteLine();
-            }
+            return new List<Submission>(submissions);  // Return copy
         }
 
         // Method 5:Show Pending students (who haven't submitted till now)
-        public void ShowPendingStudents(List<string> allStudentIds, List<string> allStudentNames)
+        public List<string> GetPendingStudents(List<string> allStudentIds)
         {
-            Console.WriteLine($"\nPending Submissions for: {Title}");
+            List<string> pendingStudents = new List<string>();
 
-            int pendingCount = 0;
+           
 
-            for (int i = 0; i < allStudentIds.Count; i++)
+            foreach (string studentId in allStudentIds)
             {
                 bool hasSubmitted = false;
                 
                 foreach (var sub in submissions)
                 {
-                    if (sub.StudentId == allStudentIds[i])
+                    if (sub.StudentId == studentId)
                     {
                         hasSubmitted = true;
                         break;
@@ -200,32 +176,16 @@ namespace HomeworkTrackingSystem
 
                 if (!hasSubmitted)
                 {
-                    pendingCount++;
-                    Console.WriteLine($"{allStudentNames[i]} ({allStudentIds[i]})");
+                    pendingStudents.Add(studentId);
                 }
             }
 
-            if (pendingCount == 0)
-            {
-                Console.WriteLine(" Everyone submitted!");
-            }
-            else
-            {
-                Console.WriteLine($"\nTotal Pending: {pendingCount} students");
-            }
+            return pendingStudents;
         }
 
-        // Method 6: Homework summary
-        public void DisplayHomeworkInfo()
-        {
-            Console.WriteLine($"  [{HomeworkId}] {Title} ({Subject})");
-            Console.WriteLine($"       Description: {Description}");
-            Console.WriteLine($"       Assigned: {AssignDate:dd MMM yyyy} | Due: {DueDate :dd MMM yyyy}");
-            Console.WriteLine($"       Total Marks: {TotalMarks}");
-            Console.WriteLine($"       Submissions: {submissions.Count} | Graded: {GradedCount}");
-        }
+        
 
-        // Method 7: Calculate average grade
+        // Method 6: Calculate average grade
         public double CalculateAverageGrade()
         {
             if (GradedCount == 0)
@@ -245,17 +205,53 @@ namespace HomeworkTrackingSystem
             return totalGrade / GradedCount;
         }
 
-        // Method 8: Check if overdue
+        // Method 7: Check if overdue
         public bool IsOverdue()
         {
             return DateTime.Now > DueDate;
         }
 
-        // Method 9: Days remaining
+        // Method 8: Days remaining
         public int DaysRemaining()
         {
             TimeSpan remaining = DueDate - DateTime.Now;
             return remaining.Days;
+        }
+
+         // Method 9: Get submission by student ID
+        public Submission GetSubmissionByStudentId(string studentId)
+        {
+            foreach (var sub in submissions)
+            {
+                if (sub.StudentId == studentId)
+                {
+                    return sub;
+                }
+            }
+            return null;
+        }
+
+        // Method 10: Check if student has submitted
+        public bool HasStudentSubmitted(string studentId)
+        {
+            foreach (var sub in submissions)
+            {
+                if (sub.StudentId == studentId)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Method 11: Get submission rate (percentage)
+        public double GetSubmissionRate(int totalStudents)
+        {
+            if (totalStudents == 0)
+            {
+                return 0;
+            }
+            return (submissions.Count * 100.0) / totalStudents;
         }
     }
 }
