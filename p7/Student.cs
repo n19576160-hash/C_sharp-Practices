@@ -17,18 +17,16 @@ namespace HomeworkTrackingSystem
             this.ClassName = className;
         }
 
-        // Method: Showing Student information
-        public void DisplayInfo()
+// Method: Short info
+        public string GetStudentInfo()
         {
-            Console.WriteLine($"  {Name}");
-            Console.WriteLine($"   ID: {StudentId}");
-            Console.WriteLine($"   Class: {ClassName}");
+            return $"[{StudentId}] {Name} - {ClassName}";
         }
 
-        // Method: Short info
-        public void DisplayShortInfo()
+        // Method: Get detailed info as string
+        public string GetDetailedInfo()
         {
-            Console.WriteLine($"  [{StudentId}] {Name} - {ClassName}");
+            return $"Student ID: {StudentId}\nName: {Name}\nClass: {ClassName}";
         }
     }
 }
