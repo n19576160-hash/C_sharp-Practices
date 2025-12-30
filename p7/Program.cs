@@ -39,7 +39,8 @@ namespace HomeworkTrackingSystem
                 100
             );
             homeworks.Add(hw1);
-            hw1.AssignToStudents(students.Count);
+            DisplayHomeworkAssigned(hw1, students.Count);
+            
 
             // Homework 2: English
             DateTime englishDueDate = DateTime.Now.AddDays(5);
@@ -52,7 +53,8 @@ namespace HomeworkTrackingSystem
                 100
             );
             homeworks.Add(hw2);
-            hw2.AssignToStudents(students.Count);
+            DisplayHomeworkAssigned(hw2, students.Count);
+            
 
             // Homework 3: Science
             DateTime scienceDueDate = DateTime.Now.AddDays(10);
@@ -65,7 +67,7 @@ namespace HomeworkTrackingSystem
                 100
             );
             homeworks.Add(hw3);
-            hw3.AssignToStudents(students.Count);
+            DisplayHomeworkAssigned(hw3, students.Count);
 
             Console.WriteLine($"\n Total {homeworks.Count} homework assigned");
 
@@ -73,96 +75,92 @@ namespace HomeworkTrackingSystem
 
             // Math Homework submissions
             Console.WriteLine("--- Math Homework Submissions ---");
-            hw1.SubmitHomework("S001", "Imtiaz Rahman");
-            hw1.SubmitHomework("S003", "Sakib Ahmed");
-            hw1.SubmitHomework("S005", "Rakib Hasan");
-            hw1.SubmitHomework("S006", "Tasnim Akter");
+            HandleSubmission(hw1, "S001", "Imtiaz Rahman");
+            HandleSubmission(hw1, "S003", "Sakib Ahmed");
+            HandleSubmission(hw1, "S005", "Rakib Hasan");
+            HandleSubmission(hw1, "S006", "Tasnim Akter");
 
-            // English Homework submissions
+             // English Homework submissions
             Console.WriteLine("\n--- English Homework Submissions ---");
-            hw2.SubmitHomework("S001", "Imtiaz Rahman");
-            hw2.SubmitHomework("S002", "Faria Islam");
-            hw2.SubmitHomework("S004", "Nusrat Jahan");
-            hw2.SubmitHomework("S005", "Rakib Hasan");
-            hw2.SubmitHomework("S006", "Tasnim Akter");
+            HandleSubmission(hw2, "S001", "Imtiaz Rahman");
+            HandleSubmission(hw2, "S002", "Faria Islam");
+            HandleSubmission(hw2, "S004", "Nusrat Jahan");
+            HandleSubmission(hw2, "S005", "Rakib Hasan");
+            HandleSubmission(hw2, "S006", "Tasnim Akter");
 
             // Science Homework submissions
             Console.WriteLine("\n--- Science Homework Submissions ---");
-            hw3.SubmitHomework("S001", "Imtiaz Rahman");
-            hw3.SubmitHomework("S002", "Faria Islam");
-            hw3.SubmitHomework("S003", "Sakib Ahmed");
+            HandleSubmission(hw3, "S001", "Imtiaz Rahman");
+            HandleSubmission(hw3, "S002", "Faria Islam");
+            HandleSubmission(hw3, "S003", "Sakib Ahmed");
 
             // Duplicate submission attempt
             Console.WriteLine("\n--- Duplicate Submission Test ---");
-            hw1.SubmitHomework("S001", "Imtiaz Rahman");
+            HandleSubmission(hw1, "S001", "Imtiaz Rahman");
+            
 
             // Step 4: Teacher is grading...
 
             // Grade Math homework
             Console.WriteLine("--- Grading Math Homework ---");
-            hw1.GradeSubmission("S001", 95, "Excellent work!");
-            hw1.GradeSubmission("S003", 87, "Good effort, minor mistakes");
-            hw1.GradeSubmission("S005", 78, "Need to show more steps");
-            hw1.GradeSubmission("S006", 92, "Very well done!");
+            HandleGrading(hw1, "S001", 95, "Excellent work!");
+            HandleGrading(hw1, "S003", 87, "Good effort, minor mistakes");
+            HandleGrading(hw1, "S005", 78, "Need to show more steps");
+            HandleGrading(hw1, "S006", 92, "Very well done!");
 
             // Grade English homework
             Console.WriteLine("\n--- Grading English Homework ---");
-            hw2.GradeSubmission("S001", 88, "Well structured essay");
-            hw2.GradeSubmission("S002", 91, "Creative and insightful");
-            hw2.GradeSubmission("S004", 85, "Good content, improve grammar");
-            hw2.GradeSubmission("S005", 82, "Needs more examples");
+            HandleGrading(hw2, "S001", 88, "Well structured essay");
+            HandleGrading(hw2, "S002", 91, "Creative and insightful");
+            HandleGrading(hw2, "S004", 85, "Good content, improve grammar");
+            HandleGrading(hw2, "S005", 82, "Needs more examples");
 
             // Grade Science homework (partial)
             Console.WriteLine("\n--- Grading Science Homework ---");
-            hw3.GradeSubmission("S001", 94, "Excellent lab report");
-            hw3.GradeSubmission("S002", 89, "Good observations");
+            HandleGrading(hw3, "S001", 94, "Excellent lab report");
+            HandleGrading(hw3, "S002", 89, "Good observations");
+
+
+            // Invalid grading attempt
+            Console.WriteLine("\n--- Invalid Grading Test ---");
+            HandleGrading(hw1, "S001", 150, "Too high!");  // Invalid grade
+            HandleGrading(hw1, "S999", 85, "Good");  // Non-existent submission
+
 
             // Step 5: Showing all submissions 
 
-            hw1.ShowAllSubmissions();
-            hw2.ShowAllSubmissions();
-            hw3.ShowAllSubmissions();
+            DisplayAllSubmissions(hw1);
+            DisplayAllSubmissions(hw2);
+            DisplayAllSubmissions(hw3);
 
             // Step 6: Pending submissions showing
 
-            List<string> studentIds = new List<string>();
-            List<string> studentNames = new List<string>();
-            
-            foreach (var student in students)
-            {
-                studentIds.Add(student.StudentId);
-                studentNames.Add(student.Name);
-            }
-
-            hw1.ShowPendingStudents(studentIds, studentNames);
+            DisplayPendingSubmissions(hw1, students);
             Console.WriteLine();
-            hw2.ShowPendingStudents(studentIds, studentNames);
+            DisplayPendingSubmissions(hw2, students);
             Console.WriteLine();
-            hw3.ShowPendingStudents(studentIds, studentNames);
+            DisplayPendingSubmissions(hw3, students);
 
             // Step 7: Statistics and Analysis
 
-            DisplayHomeworkStatistics(homeworks);
+             DisplayHomeworkStatistics(homeworks, students.Count);
 
             // Step 8: performance of Individual student 
 
-            ShowStudentPerformance("S001", "Imtiaz Rahman", homeworks);
-            ShowStudentPerformance("S002", "Faria Islam", homeworks);
+            ShowStudentPerformance(students[0], homeworks);
+            ShowStudentPerformance(students[1], homeworks);
 
             // Step ৯: Homework overview
 
-            for (int i = 0; i < homeworks.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}.");
-                homeworks[i].DisplayHomeworkInfo();
-                Console.WriteLine();
-            }
+            DisplayHomeworkOverview(homeworks);
 
             
             
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }
+
+
 
         // Helper Method 1: Showing all students 
         static void DisplayAllStudents(List<Student> students)
@@ -172,48 +170,115 @@ namespace HomeworkTrackingSystem
 
             for (int i = 0; i < students.Count; i++)
             {
-                Console.Write($"{i + 1}. ");
-                students[i].DisplayShortInfo();
+                Console.Write($"{i + 1}. {students[i].GetStudentInfo()} ");
             }
         }
 
+        // Display homework assignment
+        static void DisplayHomeworkAssigned(Homework hw, int studentCount)
+        {
+            Console.WriteLine($"\nHomework '{hw.Title}' assigned");
+            Console.WriteLine($"  Subject: {hw.Subject}");
+            Console.WriteLine($"  Assign Date: {hw.AssignDate:dd MMM yyyy}");
+            Console.WriteLine($"  Due Date: {hw.DueDate:dd MMM yyyy}");
+            Console.WriteLine($"  Total Students: {studentCount}");
+            Console.WriteLine($"  Total Marks: {hw.TotalMarks}");
+        }
+
+        // Handle submission 
+        static void HandleSubmission(Homework hw, string studentId, string studentName)
+        {
+            SubmissionResult result = hw.SubmitHomework(studentId, studentName);
+
+            switch (result)
+            {
+                case SubmissionResult.Success:
+                    Console.WriteLine($"{studentName} successfully submitted homework!");
+                    
+                    // Check if late
+                    if (hw.IsSubmissionLate(studentId))
+                    {
+                        Console.WriteLine($" LATE submission! (Due: {hw.DueDate:dd MMM yyyy})");
+                    }
+                    break;
+
+                case SubmissionResult.AlreadySubmitted:
+                    Console.WriteLine($"{studentName} already submitted this homework!");
+                    break;
+
+                case SubmissionResult.InvalidStudent:
+                    Console.WriteLine($"Invalid student ID!");
+                    break;
+            }
+        }
+
+
+        // Handle grading 
+        static void HandleGrading(Homework hw, string studentId, double grade, string comments)
+        {
+            GradingResult result = hw.GradeSubmission(studentId, grade, comments);
+
+            switch (result)
+            {
+                case GradingResult.Success:
+                    Submission sub = hw.GetSubmissionByStudentId(studentId);
+                    Console.WriteLine($"{sub.StudentName}'s homework graded: {grade}/{hw.TotalMarks}");
+                    if (!string.IsNullOrEmpty(comments))
+                    {
+                        Console.WriteLine($"  Comment: \"{comments}\"");
+                    }
+                    break;
+
+                case GradingResult.InvalidGrade:
+                    Console.WriteLine($"Invalid grade! Must be between 0 and {hw.TotalMarks}");
+                    break;
+
+                case GradingResult.SubmissionNotFound:
+                    Console.WriteLine($"No submission found for student ID: {studentId}");
+                    break;
+            }
+        }
+
+
+
+
         // Helper Method 2: Homework statistics
-        static void DisplayHomeworkStatistics(List<Homework> homeworks)
+        static void DisplayHomeworkStatistics(List<Homework> homeworks,int totalStudents)
         {
             foreach (var hw in homeworks)
             {
                 Console.WriteLine($"{hw.Title} ({hw.Subject})");
-                Console.WriteLine($"   Submissions: {hw.SubmissionCount}");
+                Console.WriteLine($"   Submissions: {hw.SubmissionCount}/{totalStudents} " +
+                                $"({hw.GetSubmissionRate(totalStudents):F1}%)");
                 Console.WriteLine($"   Graded: {hw.GradedCount}/{hw.SubmissionCount}");
                 
                 double avg = hw.CalculateAverageGrade();
                 if (hw.GradedCount > 0)
                 {
-                    Console.WriteLine($"   Average Grade: {avg:F2}/100");
+                    Console.WriteLine($"   Average Grade:  {hw.CalculateAverageGrade():F2}/{hw.TotalMarks}");
                 }
                 else
                 {
                     Console.WriteLine($"   Average Grade: N/A (not yet graded)");
                 }
 
-                int daysRemaining = hw.DaysRemaining();
                 if (hw.IsOverdue())
                 {
                     Console.WriteLine($"   Status: OVERDUE");
                 }
                 else
                 {
-                    Console.WriteLine($"   Days Remaining: {daysRemaining} days");
+                    Console.WriteLine($"   Days Remaining: {hw.DaysRemaining()} days");
                 }
                 Console.WriteLine();
             }
         }
 
         // Helper Method 3: Individual student performance
-        static void ShowStudentPerformance(string studentId, string studentName, 
+        static void ShowStudentPerformance(Student student,
                                           List<Homework> homeworks)
         {
-            Console.WriteLine($"Student: {studentName} ({studentId})");
+            Console.WriteLine($"Student: {student.Name} ({student.StudentId})");
 
             int totalSubmitted = 0;
             int totalGraded = 0;
@@ -221,15 +286,124 @@ namespace HomeworkTrackingSystem
 
             foreach (var hw in homeworks)
             {
-                Console.WriteLine($" {hw.Title}: Check submissions");
+               if (hw.HasStudentSubmitted(student.StudentId))
+                {
+                    totalSubmitted++;
+                    
+                    Submission sub = hw.GetSubmissionByStudentId(student.StudentId);
+                    string status = sub.IsGraded 
+                        ? $"{sub.Grade}/{hw.TotalMarks}" 
+                        : "Pending";
+                    
+                    Console.WriteLine($"  • {hw.Title}: {status}");
+                    
+                    if (sub.IsGraded)
+                    {
+                        totalGraded++;
+                        totalGrade += sub.Grade;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"  • {hw.Title}:  Not submitted");
+                }
             }
+            Console.WriteLine($"\n  Summary:");
+            Console.WriteLine($"    Submitted: {totalSubmitted}/{homeworks.Count}");
+            Console.WriteLine($"    Graded: {totalGraded}/{totalSubmitted}");
 
-            Console.WriteLine($"  Summary: {totalSubmitted} submitted, {totalGraded} graded");
+            // Console.WriteLine($"  Summary: {totalSubmitted} submitted, {totalGraded} graded");
             if (totalGraded > 0)
             {
-                Console.WriteLine($"  Average: {totalGrade / totalGraded:F2}/100");
+                Console.WriteLine($"  Averagerade: {(totalGrade / totalGraded):F2}/100");
             }
             Console.WriteLine();
         }
+
+        // Display homework overview
+        static void DisplayHomeworkOverview(List<Homework> homeworks)
+        {
+            for (int i = 0; i < homeworks.Count; i++)
+            {
+                Homework hw = homeworks[i];
+                Console.WriteLine($"{i + 1}. [{hw.HomeworkId}] {hw.Title} ({hw.Subject})");
+                Console.WriteLine($"   Description: {hw.Description}");
+                Console.WriteLine($"   Assigned: {hw.AssignDate:dd MMM yyyy} | Due: {hw.DueDate:dd MMM yyyy}");
+                Console.WriteLine($"   Total Marks: {hw.TotalMarks}");
+                Console.WriteLine($"   Submissions: {hw.SubmissionCount} | Graded: {hw.GradedCount}");
+                Console.WriteLine();
+            }
+        }
+
+        //Helper Methods 4:Display All submissions
+        static void DisplayAllSubmissions(Homework hw){
+            Console.WriteLine($"Homework : {hw.Title}");
+            
+            List<Submission> submissions = hw.GetAllSubmissions();
+
+            if(submissions.Count == 0){
+                Console.WriteLine("No Submissions Yet.\n");
+                return;
+            }
+
+            Console.WriteLine($"Total Submissions: {hw.SubmissionCount}");
+            Console.WriteLine($"  Graded: {hw.GradedCount}/{hw.SubmissionCount}\n");
+
+            foreach (var sub in submissions)
+            {
+                Console.WriteLine($"    {sub.StudentName} ({sub.StudentId})");
+                Console.WriteLine($"     Submit Date: {sub.SubmitDate:dd MMM yyyy}");
+                
+                string gradeInfo = sub.IsGraded 
+                    ? $"{sub.Grade}/{hw.TotalMarks}" 
+                    : "Not graded yet";
+                Console.WriteLine($"       Grade: {gradeInfo}");
+                
+                if (sub.IsGraded && !string.IsNullOrEmpty(sub.Comments))
+                {
+                    Console.WriteLine($"       Comment: \"{sub.Comments}\"");
+                }
+                Console.WriteLine();
+            }
+        }
+
+         // Display pending submissions
+        static void DisplayPendingSubmissions(Homework hw, List<Student> students)
+        {
+            Console.WriteLine($"\n Pending for: {hw.Title}");
+            
+
+            List<string> allStudentIds = new List<string>();
+            foreach (var student in students)
+            {
+                allStudentIds.Add(student.StudentId);
+            }
+
+            List<string> pendingIds = hw.GetPendingStudents(allStudentIds);
+
+            if (pendingIds.Count == 0)
+            {
+                Console.WriteLine("  All students submitted!");
+                return;
+            }
+
+            foreach (string pendingId in pendingIds)
+            {
+                // Find student name
+                foreach (var student in students)
+                {
+                    if (student.StudentId == pendingId)
+                    {
+                        Console.WriteLine($"  {student.Name} ({student.StudentId})");
+                        break;
+                    }
+                }
+            }
+
+            Console.WriteLine($"\nTotal Pending: {pendingIds.Count} students");
+        }
+
+
     }
+    
 }
